@@ -17,7 +17,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,56 +33,45 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Install SDK packages
+        run: |
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+          echo "ANDROID_HOME=${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
+
       - name: Decode signing keystore
         env:
           KS_B64: "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"
         run: |
           printf "%s" "$KS_B64" | base64 -d > TVBoxOSC.jks
-          chmod 600 TVBoxOSC.jks
-          ls -la TVBoxOSC.jks
+          cp TVBoxOSC.jks app/TVBoxOSC.jks
+          chmod 600 TVBoxOSC.jks app/TVBoxOSC.jks
+          ls -la TVBoxOSC.jks app/TVBoxOSC.jks
           file TVBoxOSC.jks
 
-      - name: Strip aliyun and 4thline mirrors from all gradle files
+      - name: Strip aliyun mirrors from all gradle files
         run: |
           set +e
-          files=$(grep -rl -E "(aliyun\.com|4thline\.org)" --include="*.gradle" --include="*.gradle.kts" . 2>/dev/null || true)
-          if [ -n "$files" ]; then
-            echo "Stripping unreachable mirrors from:"
+          files=$(grep -rl "aliyun" --include="*.gradle" --include="*.gradle.kts" . 2>/dev/null || true)
+          if [ -z "$files" ]; then
+            echo "OK: no aliyun mirrors found"
+          else
+            echo "Stripping aliyun from:"
             echo "$files"
             for f in $files; do
-              sed -i -E "/maven[[:space:]]*\{[[:space:]]*url[[:space:]]+"(https?:\/\/(maven\.aliyun\.com|.*\.4thline\.org)[^"]*)"[[:space:]]*\}/d" "$f"
+              sed -i "/aliyun/d" "$f"
               echo "  patched: $f"
             done
-          else
-            echo "No aliyun/4thline mirrors found"
           fi
-          remaining=$(grep -rE "(aliyun\.com|4thline\.org)" --include="*.gradle" --include="*.gradle.kts" . 2>/dev/null || true)
+          remaining=$(grep -rl "aliyun" --include="*.gradle" --include="*.gradle.kts" . 2>/dev/null || true)
           if [ -n "$remaining" ]; then
-            echo "WARNING: still present:"
-            echo "$remaining"
+            echo "WARNING: aliyun still present: $remaining"
+            exit 1
           else
-            echo "OK: no aliyun/4thline left"
+            echo "OK: aliyun removed"
           fi
-
-      - name: Inject Google + MavenCentral into empty repositories blocks
-        run: |
-          python3 - <<'INJECT_EOF'
-          import os, re, glob
-          patched = 0
-          for gf in glob.glob("**/*.gradle", recursive=True) + glob.glob("**/*.gradle.kts", recursive=True):
-            try: s = open(gf, encoding="utf-8").read()
-            except: continue
-            if "repositories" not in s: continue
-            new = re.sub(
-              r"repositories\s*\{\s*\}",
-              "repositories {\n        google()\n        mavenCentral()\n        }",
-              s)
-            if new != s:
-              open(gf, "w", encoding="utf-8").write(new)
-              patched += 1
-              print(f"  injected: {gf}")
-          print(f"Total injected: {patched}")
-          INJECT_EOF
 
       - name: Fix keystore path for Linux
         run: |
@@ -92,35 +81,33 @@ jobs:
           echo "--- after ---"
           grep -n "storeFile" app/build.gradle
 
-      - name: Disable pyramid buildPython (windows-only)
-        if: hashFiles('pyramid/build.gradle') != ''
+      - name: Remove ndk block (no native code, avoids NDK requirement)
         run: |
-          if grep -q "python\.exe" pyramid/build.gradle; then
-            sed -i "/python\.exe/d" pyramid/build.gradle
-            echo "Stripped python.exe line from pyramid/build.gradle"
-          fi
+          sed -i "/^[[:space:]]*ndk {/,/^[[:space:]]*}/d" app/build.gradle
+          echo "--- ndk block removed ---"
+          grep -n "ndk" app/build.gradle || echo "no ndk references left"
 
       - name: Setup local.properties
         run: |
-          : > local.properties
+          echo "sdk.dir=${ANDROID_HOME:-$ANDROID_SDK_ROOT}" > local.properties
+          cat local.properties
 
       - name: Build APK
         run: |
           set -o pipefail
           chmod +x gradlew
-          echo "=== gradle version ===" | tee build.log
-          ./gradlew --version 2>&1 | tee -a build.log
+          echo "=== gradle version ==="
+          ./gradlew --version 2>&1 | tee build.log
           echo "" >> build.log
           echo "=== assembleRelease start: $(date -u +%FT%TZ) ===" >> build.log
-          # cache service was 500 earlier; use --no-build-cache. --no-daemon avoids daemon-related issues on cold runner.
-          ./gradlew assembleRelease --no-daemon --no-build-cache --warning-mode all --stacktrace --info 2>&1 | tee -a build.log
+          ./gradlew assembleRelease --no-daemon --no-build-cache --warning-mode all --stacktrace 2>&1 | tee -a build.log
           rc=$?
           echo "" >> build.log
           echo "=== gradle exited with code $rc at $(date -u +%FT%TZ) ===" >> build.log
-          echo "=== last 150 lines of build.log ==="
-          tail -n 150 build.log || true
+          echo "=== last 120 lines of build.log ==="
+          tail -n 120 build.log || true
           if [ $rc -ne 0 ]; then
-            echo "!! gradle assembleRelease FAILED with code $rc, failing the step"
+            echo "!! gradle assembleRelease failed with code $rc, failing the step"
             exit $rc
           fi
           echo "=== app/build/outputs tree ==="
@@ -130,16 +117,15 @@ jobs:
         if: always()
         run: |
           mkdir -p output
-          found=$(find . -path ./node_modules -prune -o -name "*release*.apk" -type f -print 2>/dev/null | head -20)
+          found=$(find . -path ./node_modules -prune -o -name '*release*.apk' -type f -print 2>/dev/null | head -20)
           echo "=== APK files found: ==="
           echo "$found"
           if [ -z "$found" ]; then
-            echo "!! No *release*.apk found anywhere"
-            echo "--- searching for any .apk files ---"
-            find . -name "*.apk" -type f 2>/dev/null | head -20 || true
+            echo "!! No *release*.apk anywhere in repo"
+            find . -name '*.apk' -type f 2>/dev/null | head -20 || true
           else
             while IFS= read -r f; do
-              if [ -n "$f" ]; then mv "$f" output/ && echo "moved $f -> output/"; fi
+              [ -n "$f" ] && mv "$f" output/ && echo "moved $f -> output/"
             done <<< "$found"
           fi
           echo "=== output/ contents ==="
