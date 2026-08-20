@@ -40,8 +40,8 @@ jobs:
           set -e
           mkdir -p "$ANDROID_HOME/cmdline-tools"
           cd "$ANDROID_HOME/cmdline-tools"
-          echo "==> Downloading commandline-tools (v11.0, works with JDK 11) ..."
-          curl -fsSL https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -o ct.zip
+          echo "==> Downloading commandline-tools (v10.0, works with JDK 11) ..."
+          curl -fsSL https://dl.google.com/android/repository/commandlinetools-linux-9862592_latest.zip -o ct.zip
           unzip -q ct.zip
           mv cmdline-tools latest
           export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
