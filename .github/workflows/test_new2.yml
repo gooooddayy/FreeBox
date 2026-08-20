@@ -64,28 +64,6 @@ jobs:
           ls -la TVBoxOSC.jks app/TVBoxOSC.jks
           file TVBoxOSC.jks
 
-      - name: Strip aliyun mirrors from all gradle files
-        run: |
-          set +e
-          files=$(grep -rl "aliyun" --include="*.gradle" --include="*.gradle.kts" . 2>/dev/null || true)
-          if [ -z "$files" ]; then
-            echo "OK: no aliyun mirrors found"
-          else
-            echo "Stripping aliyun from:"
-            echo "$files"
-            for f in $files; do
-              sed -i "/aliyun/d" "$f"
-              echo "  patched: $f"
-            done
-          fi
-          remaining=$(grep -rl "aliyun" --include="*.gradle" --include="*.gradle.kts" . 2>/dev/null || true)
-          if [ -n "$remaining" ]; then
-            echo "WARNING: aliyun still present: $remaining"
-            exit 1
-          else
-            echo "OK: aliyun removed"
-          fi
-
       - name: Fix keystore path for Linux
         run: |
           echo "--- before ---"
